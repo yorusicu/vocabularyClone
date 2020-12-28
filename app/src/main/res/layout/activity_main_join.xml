@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity_join">
+
+    <TextView
+        android:id="@+id/tv_join_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"
+        android:text="회원 가입"
+        android:textSize="40sp" />
+
+    <RelativeLayout
+        android:id="@+id/rel_join_inputbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_join_title"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp">
+
+        <TextView
+            android:id="@+id/tv_join_id"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:background="#EEEEEE"
+            android:gravity="center"
+            android:text="아이디"
+            android:textSize="25sp" />
+
+        <TextView
+            android:id="@+id/tv_join_pw"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:layout_below="@+id/btn_join_verify"
+            android:background="#EEEEEE"
+            android:gravity="center"
+            android:text="패스워드"
+            android:textSize="25sp" />
+
+        <TextView
+            android:id="@+id/tv_join_chkpw"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:layout_below="@+id/tv_join_pw"
+            android:layout_marginTop="5dp"
+            android:background="#EEEEEE"
+            android:gravity="center"
+            android:text="확인"
+            android:textSize="25sp" />
+
+
+        <TextView
+            android:id="@+id/tv_join_name"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:layout_below="@+id/tv_join_chkpw"
+            android:layout_marginTop="5dp"
+            android:background="#EEEEEE"
+            android:gravity="center"
+            android:text="닉네임"
+            android:textSize="25sp" />
+
+        <TextView
+            android:id="@+id/tv_join_phone"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:layout_below="@+id/tv_join_name"
+            android:layout_marginTop="5dp"
+            android:background="#EEEEEE"
+            android:gravity="center"
+            android:text="연락처"
+            android:textSize="25sp" />
+
+        <!-- <TextView
+             android:id="@+id/tv_join_langauge"
+             android:layout_width="100dp"
+             android:layout_height="40dp"
+             android:layout_below="@+id/tv_join_name"
+             android:layout_marginTop="5dp"
+             android:background="#EEEEEE"
+             android:gravity="center"
+             android:text="관심 언어"
+             android:textSize="25sp" />-->
+
+        <EditText
+            android:id="@+id/et_join_id"
+            android:layout_width="180dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/tv_join_id"
+            android:inputType="text"
+            android:maxLines="1" />
+
+        <EditText
+            android:id="@+id/et_join_pw"
+            android:layout_width="180dp"
+            android:layout_height="40dp"
+            android:layout_below="@+id/btn_join_verify"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/tv_join_id"
+            android:inputType="textPassword"
+            android:maxLines="1" />
+
+        <EditText
+            android:id="@+id/et_join_chkpw"
+            android:layout_width="180dp"
+            android:layout_height="40dp"
+            android:layout_below="@+id/et_join_pw"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@+id/tv_join_id"
+            android:inputType="textPassword"
+            android:maxLines="1" />
+
+        <EditText
+            android:id="@+id/et_join_name"
+            android:layout_width="180dp"
+            android:layout_height="40dp"
+            android:layout_below="@+id/et_join_chkpw"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@+id/tv_join_id"
+            android:inputType="text"
+            android:maxLines="1" />
+
+        <EditText
+            android:id="@+id/et_join_phone"
+            android:layout_width="180dp"
+            android:layout_height="40dp"
+            android:layout_below="@+id/et_join_name"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@+id/tv_join_id"
+            android:inputType="number"
+            android:maxLines="1" />
+        <!-- <EditText
+             android:id="@+id/et_join_langauge"
+             android:layout_width="180dp"
+             android:layout_height="40dp"
+             android:layout_below="@+id/et_join_name"
+             android:layout_toRightOf="@+id/tv_join_id"
+             android:layout_marginTop="5dp"
+             android:layout_marginLeft="5dp"/>-->
+        <Button
+            android:id="@+id/btn_join_verify"
+            android:layout_width="280dp"
+            android:layout_height="40dp"
+            android:layout_below="@id/et_join_id"
+            android:layout_centerHorizontal="true"
+            android:text="ID 중복확인"
+            android:textSize="18sp" />
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/btn_join_join"
+        android:layout_width="280dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/rel_join_inputbox"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20sp"
+        android:text="회원 가입"
+        android:textSize="20sp" />
+
+</RelativeLayout>
