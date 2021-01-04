@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="5dp"
+    tools:context=".ListActivity">
+
+    <ImageView
+        android:id="@+id/iv_item_main"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@mipmap/ic_launcher_round" />
+
+    <TextView
+        android:id="@+id/tv_item_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/iv_item_main"
+        android:minHeight="40dp"
+        android:padding="10dp"
+        android:text="헬로우헬로우헬로우헬로우헬로우헬로우"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/tv_item_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/iv_item_main"
+        android:layout_alignParentRight="true"
+        android:gravity="center"
+        android:text="2020.12.30"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tv_item_writer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/iv_item_main"
+        android:layout_toLeftOf="@+id/tv_item_date"
+        android:layout_marginRight="10dp"
+        android:gravity="center"
+        android:text="writer"
+        android:textSize="14sp" />
+    <Button
+        android:id="@+id/btn_item_edit"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_item_date"
+        android:layout_alignRight="@+id/tv_item_date"
+        android:focusable="false"
+        android:text="수정"/>
+    <Button
+        android:id="@+id/btn_item_del"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_item_date"
+        android:layout_toLeftOf="@+id/btn_item_edit"
+        android:focusable="false"
+        android:text="삭제"/>
+
+
+</RelativeLayout>

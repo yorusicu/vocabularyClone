@@ -50,7 +50,9 @@
             android:layout_marginLeft="5dp"
             android:layout_toRightOf="@+id/tv_log_id"
             android:hint="ID 입력"
-            android:paddingLeft="10dp" />
+            android:paddingLeft="10dp"
+            android:inputType="text"
+            android:maxLines="1"/>
 
         <EditText
             android:id="@+id/et_log_pw"
@@ -60,7 +62,9 @@
             android:layout_marginLeft="5dp"
             android:layout_toRightOf="@+id/tv_log_pw"
             android:hint="PW 입력"
-            android:paddingLeft="10dp" />
+            android:paddingLeft="10dp"
+            android:inputType="textPassword"
+            android:maxLines="1"/>
 
     </RelativeLayout>
     <RelativeLayout

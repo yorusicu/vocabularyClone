@@ -31,4 +31,8 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     // Volley사용(네트워크)
     implementation 'com.android.volley:volley:1.1.1'
+    // GLide사용(이미지)
+    implementation 'com.github.bumptech.glide:glide:3.7.0'
+    //swiperefreshlayout(리스트 새로고침)
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 }

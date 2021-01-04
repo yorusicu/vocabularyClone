@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity_join">
+    tools:context=".JoinActivity">
 
     <TextView
         android:id="@+id/tv_join_title"
@@ -92,7 +92,7 @@
             android:layout_height="40dp"
             android:layout_marginLeft="5dp"
             android:layout_toRightOf="@+id/tv_join_id"
-            android:inputType="text"
+            android:inputType="textEmailAddress"
             android:maxLines="1" />
 
         <EditText
