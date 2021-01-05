@@ -36,7 +36,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ListActivity extends BaseActivity implements AdapterView.OnItemClickListener, View.OnClickListener {
+public class ListActivity extends BaseActivity implements AdapterView.OnItemClickListener {
     /**
      * 1. item 위한 레이아웃을 만든다
      * 3. item 위한 데이터 클래스 만든다
@@ -58,11 +58,14 @@ public class ListActivity extends BaseActivity implements AdapterView.OnItemClic
     RelativeLayout loadingLayout;
 
     int mode = 0;   // 수정/삭제 버튼
-    String idx ="0";     // 리스트불러오기 위한 idx
+    String idx = "0";     // 리스트불러오기 위한 idx
+    int position;       // 리스트 아이템 위치
+
     boolean isEnd = false;  // 리스트가 끝인지 확인
     boolean lastItemVisibleFlag = false;    // 리스트가 바닥에 닿았는지 확인
-//    String url = "http://172.16.146.14:8080/oop/mcontentlist.do";   // 동욱씨 자리 IP
-    String url = "http://192.168.123.112:8080/oop/mcontentlist.do";   // 집 IP
+    String url = "http://172.16.146.14:8080/oop/mcontentlist.do";   // 동욱씨 자리 IP
+//    String url = "http://192.168.123.112:8080/oop/mcontentlist.do";   // 집 IP
+    String delUrl="http://172.16.146.14:8080/oop/mcontentDel.do";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,21 +83,30 @@ public class ListActivity extends BaseActivity implements AdapterView.OnItemClic
         request(url, successListListener);
 
         adapter = new MyAdapter(this);
-        btnMode.setOnClickListener(this);
         lvMain.setAdapter(adapter);
         lvMain.setOnItemClickListener(this);
 
+        // 모드 버튼 클릭시 수정삭제 버튼 나오기
+        btnMode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mode = mode == 0 ? 1 : 0;
+                adapter.notifyDataSetChanged();
+            }
+        });
+        // 페이징 처리
         lvMain.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView absListView, int scrollState) {
                 //OnScrollListener.SCROLL_STATE_IDLE은 스크롤이 이동하다가 멈추었을때 발생되는 스크롤 상태입니다.
                 //즉 스크롤이 바닦에 닿아 멈춘 상태에 처리를 하겠다는 뜻
-                if(scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE && lastItemVisibleFlag && !isEnd) {
+                if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE && lastItemVisibleFlag && !isEnd) {
                     //TODO 화면이 바닦에 닿을때 처리
-                    idx = arr.get(arr.size()-1).idx;
+                    idx = arr.get(arr.size() - 1).idx;
                     requestForData();
                 }
             }
+
             @Override
             public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 //현재 화면에 보이는 첫번째 리스트 아이템의 번호(firstVisibleItem) + 현재 화면에 보이는 리스트 아이템의 갯수(visibleItemCount)가 리스트 전체의 갯수(totalItemCount) -1 보다 크거나 같을때
@@ -111,13 +123,15 @@ public class ListActivity extends BaseActivity implements AdapterView.OnItemClic
             }
         });
     }
-    private void requestForData(){
+
+    private void requestForData() {
         loadingLayout.setVisibility(View.VISIBLE);
         params.clear();
         params.put("idx", idx);
         request(url, successListListener);
     }
 
+    // 통신 성공시(list불러오기)
     Response.Listener<String> successListListener = new Response.Listener<String>() {
         @Override
         public void onResponse(String response) {
@@ -129,8 +143,7 @@ public class ListActivity extends BaseActivity implements AdapterView.OnItemClic
 //                String result=jsonArray.getJSONObject(0).getString("result");
 //                Log.d("log", "result: "+result);
 
-                String idx = null, title = null, write = null, date = null, img = null, explan = null;
-                int price = 0;
+                String idx = null, title = null, write = null, date = null, img = null, explan = null, price = null;
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject temp = jsonArray.getJSONObject(i);
 //                    Log.d("log", "temp: " + temp);
@@ -138,9 +151,10 @@ public class ListActivity extends BaseActivity implements AdapterView.OnItemClic
                     title = temp.getString("title");
                     write = temp.optString("name");
                     date = temp.getString("date");
-//                    img = "http://172.16.146.14:8080/oop/img/shoes/" + temp.getString("img").trim();    // 학원(동욱씨)
-                    img = "http://192.168.123.112:8080/oop/img/shoes/" + temp.getString("img").trim();    // 집
-                    price = Integer.parseInt(temp.getString("price"));
+                    img = "http://172.16.146.14:8080/oop/img/shoes/" + temp.getString("img").trim();    // 학원(동욱씨)
+//                    img = "http://192.168.123.112:8080/oop/img/shoes/" + temp.getString("img").trim();    // 집
+                    price = temp.getString("price");
+//                    Log.d("price", "price: " + price);
                     explan = temp.getString("explan");
 
                     arr.add(new ItemData(idx, title, write, date, img, price, explan));
@@ -152,11 +166,14 @@ public class ListActivity extends BaseActivity implements AdapterView.OnItemClic
         }
     };
 
+
+    // 각 리스트아이템별 데이터 던지기
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
         String idx = arr.get(position).idx;
-        Log.d("log", idx);
-        Intent intent = new Intent(this, com.jimiboy.vocabularyclone.DetailActivity.class);
+//        Log.d("log", idx);
+        Intent intent = new Intent(this, DetailActivity.class);
         intent.putExtra("idx", idx);
         intent.putExtra("title", arr.get(position).title);
         intent.putExtra("name", arr.get(position).writer);
@@ -168,17 +185,6 @@ public class ListActivity extends BaseActivity implements AdapterView.OnItemClic
         startActivity(intent);
     }
 
-    // 모드 버튼 클릭시 수정삭제 버튼 나오기
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btn_list_mode:
-                mode = mode == 0 ? 1 : 0;
-                adapter.notifyDataSetChanged();
-                break;
-        }
-    }
-
     class ItemHolder {
         TextView tvTitleHolder;
         TextView tvDateHolder;
@@ -188,7 +194,7 @@ public class ListActivity extends BaseActivity implements AdapterView.OnItemClic
         Button btnDelHolder;
     }
 
-    class MyAdapter extends ArrayAdapter {
+    class MyAdapter extends ArrayAdapter implements View.OnClickListener {
         LayoutInflater lnf;
 
         public MyAdapter(Activity context) {
@@ -199,19 +205,16 @@ public class ListActivity extends BaseActivity implements AdapterView.OnItemClic
 
         @Override
         public int getCount() {
-            // TODO Auto-generated method stub
             return arr.size();
         }
 
         @Override
         public Object getItem(int position) {
-            // TODO Auto-generated method stub
             return arr.get(position);
         }
 
         @Override
         public long getItemId(int position) {
-            // TODO Auto-generated method stub
             return position;
         }
 
@@ -229,20 +232,6 @@ public class ListActivity extends BaseActivity implements AdapterView.OnItemClic
                 viewHolder.btnEditHolder = convertView.findViewById(R.id.btn_item_edit);
                 viewHolder.btnDelHolder = convertView.findViewById(R.id.btn_item_del);
 
-                viewHolder.btnDelHolder.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        int pos = Integer.parseInt(String.valueOf(v.getTag()));
-//                        Log.d("log", "DELpos: " + pos);
-                    }
-                });
-                viewHolder.btnEditHolder.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        int pos = Integer.parseInt(String.valueOf(v.getTag()));
-//                        Log.d("log", "EDITpos: " + pos);
-                    }
-                });
                 convertView.setTag(viewHolder);
             } else {
                 viewHolder = (ItemHolder) convertView.getTag();
@@ -255,6 +244,8 @@ public class ListActivity extends BaseActivity implements AdapterView.OnItemClic
                 viewHolder.btnEditHolder.setVisibility(View.VISIBLE);
                 viewHolder.btnDelHolder.setVisibility(View.VISIBLE);
             }
+            viewHolder.btnEditHolder.setTag(position);
+            viewHolder.btnDelHolder.setTag(position);
 
             viewHolder.tvTitleHolder.setText(arr.get(position).title);
             viewHolder.tvWriterHolder.setText(arr.get(position).writer);
@@ -265,7 +256,91 @@ public class ListActivity extends BaseActivity implements AdapterView.OnItemClic
                     .error(R.drawable.ic_launcher_foreground)
                     .into(viewHolder.ivMainHolder);
 //            Log.d("log", arr.get(position).img);
+
+            viewHolder.btnEditHolder.setOnClickListener(this);
+            viewHolder.btnDelHolder.setOnClickListener(this);
+
+
             return convertView;
         }
+
+        @Override
+        public void onClick(View v) {
+            int pos = Integer.parseInt(String.valueOf(v.getTag()));
+            position =pos;
+            Log.d("log", "onClick_getTag: " + pos);
+            switch (v.getId()) {
+                case R.id.btn_item_edit:
+                    request(url, successEditListener);
+                    showToast(v.getTag()+"수정한다");
+                    break;
+
+                case R.id.btn_item_del:
+                    RequestQueue stringRequest = Volley.newRequestQueue(getApplicationContext());
+
+                    StringRequest myReq = new StringRequest(Request.Method.POST, delUrl,
+                            successDelListener, errorListener) {
+                        String pos=String.valueOf(position);
+
+                        @Override
+                        protected Map<String, String> getParams() throws AuthFailureError {
+
+                            params.put("pos",pos);
+                            return params;
+                        }
+                    };
+                    myReq.setRetryPolicy(new DefaultRetryPolicy(3000, 0, 1f)
+
+                    );
+                    stringRequest.add(myReq);
+
+                    break;
+            }
+        }
     }
+    // 통신 성공시(edit불러오기)
+    Response.Listener<String> successEditListener = new Response.Listener<String>() {
+        @Override
+        public void onResponse(String response) {
+//            Log.d("log", "response: "+response);
+            try {
+                swipeRefreshLayout.setRefreshing(false);
+                loadingLayout.setVisibility(View.GONE);
+                JSONArray jsonArray = new JSONArray(response);
+//                String result=jsonArray.getJSONObject(0).getString("result");
+//                Log.d("log", "result: "+result);
+
+                String idx = null, title = null, write = null, date = null, img = null, explan = null, price = null;
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject temp = jsonArray.getJSONObject(i);
+//                    Log.d("log", "temp: " + temp);
+                    idx = temp.getString("idx");
+                    title = temp.getString("title");
+                    write = temp.optString("name");
+                    date = temp.getString("date");
+                    img = "http://172.16.146.14:8080/oop/img/shoes/" + temp.getString("img").trim();    // 학원(동욱씨)
+//                    img = "http://192.168.123.112:8080/oop/img/shoes/" + temp.getString("img").trim();    // 집
+                    price = temp.getString("price");
+//                    Log.d("price", "price: " + price);
+                    explan = temp.getString("explan");
+
+                    arr.add(new ItemData(idx, title, write, date, img, price, explan));
+                }
+                adapter.notifyDataSetChanged();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    };
+
+    // 통신 성공시(delete)
+    Response.Listener<String> successDelListener = new Response.Listener<String>() {
+        @Override
+        public void onResponse(String response) {
+            swipeRefreshLayout.setRefreshing(false);
+            Log.d("log", "position: "+position);
+            arr.remove(position);
+            adapter.notifyDataSetChanged();
+        }
+    };
 }
